@@ -13,20 +13,23 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v3
 
-    - name: Setup Node
+    - name: Setup Node.js 20.x
       uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: 20
 
-    - name: Install Dependencies
-      run: npm install
+    - name: Install Dependencies with retries
+      run: |
+        for i in 1 2 3; do
+          npm ci --prefer-offline --no-audit --progress=false && break || sleep 10
+        done
 
     - name: Build
       run: npm run build
 
     - name: Zip dist folder
       run: |
-        mkdir output
+        mkdir -p output
         zip -r output/dist.zip dist
 
     - name: Upload Build Artifact
