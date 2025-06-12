@@ -24,6 +24,9 @@ jobs:
           npm ci --prefer-offline --no-audit --progress=false && break || sleep 10
         done
 
+    - name: Install Missing Dev Dependency (webpack-merge)
+      run: npm install --save-dev webpack-merge
+
     - name: Build
       run: npm run build
 
